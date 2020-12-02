@@ -1,6 +1,6 @@
 {
   "name": "immutablepatch",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
@@ -30,7 +30,7 @@
     "immutablediff": "Xcraft-Inc/immutable-js-diff",
     "jscheck": "^0.2.0"
   },
-  "dependencies": {
-    "immutable": "^4.0.0-rc.2"
+  "peerDependencies": {
+    "immutable": "*"
   }
 }

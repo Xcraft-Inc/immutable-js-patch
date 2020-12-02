@@ -49,6 +49,10 @@ var sequencePatch = function(sequence, firstPath, restPath, op, value) {
         var baseValue = (restPath[0].match(/^\d+$/)) ? Immutable.List() : Immutable.Map();
         return sequence.set(firstPath, anyPatch(baseValue, restPath, op, value));
       } else {
+        // special case, add to the end
+        if (firstPath === '-') {
+          return sequence.splice(sequence.size, 0, value);
+        }
         // special case, return the value
         return sequence.splice(firstPath, 0, value);
       }
@@ -77,19 +81,28 @@ var sequencePatch = function(sequence, firstPath, restPath, op, value) {
   }
 };
 
+var isRecord = function(any) {
+  return (
+    any != null
+    && typeof any.updateIn === 'function'
+    && typeof any.set === 'function'
+  )
+}
+
 var anyPatch = function(any, pathArray, op, value) {
   var firstPath, restPath;
 
-  if (Immutable.Iterable.isKeyed(any)) {
+  if (Immutable.Iterable.isIndexed(any)) {
+   if (pathArray.length === 0) { return any; }
+   firstPath = pathArray[0];
+   restPath = pathArray.slice(1);
+   return sequencePatch(any, firstPath, restPath, op, value);
+  } else if (Immutable.Iterable.isKeyed(any) || isRecord(any)) {
+    // if the object is a record or a keyed iterable immutable object
     if (pathArray.length === 0) { return any; }
     firstPath = pathArray[0];
     restPath = pathArray.slice(1);
     return mapPatch(any, firstPath, restPath, op, value);
-  } else if (Immutable.Iterable.isIndexed(any)) {
-    if (pathArray.length === 0) { return any; }
-    firstPath = pathArray[0];
-    restPath = pathArray.slice(1);
-    return sequencePatch(any, firstPath, restPath, op, value);
   } else {
     if (pathArray.length === 0) { return value; }
     return primitivePatch(op, value);
