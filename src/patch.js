@@ -1,7 +1,6 @@
 'use strict';
 
 var Immutable = require('immutable');
-var path = require('./path');
 
 var tryParseInt = function(n) {
   var int = parseInt(n);
@@ -113,7 +112,7 @@ var eachPatchInternal = function(value, patches) {
   while (patches.size) {
     var firstPatch = patches.get(0);
     var patches = patches.slice(1);
-    var pathArray = firstPatch.get('path').split('/').slice(1).map(path.unescape);
+    var pathArray = firstPatch.get('path').toJS();
     value = anyPatch(value, pathArray, firstPatch.get('op'), firstPatch.get('value'));
   }
   return value;
@@ -122,7 +121,7 @@ var eachPatchInternal = function(value, patches) {
 var eachPatch = function(value, patches) {
   if (patches.size === 1) {
     var onlyPatch = patches.get(0);
-    if (onlyPatch.get('op') === 'replace' && onlyPatch.get('path') === '/') {
+    if (onlyPatch.get('op') === 'replace' && onlyPatch.get('path').size === 0) {
       return onlyPatch.get('value');
     }
   }
