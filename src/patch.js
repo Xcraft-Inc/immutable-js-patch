@@ -109,23 +109,23 @@ var anyPatch = function(any, pathArray, op, value) {
 };
 
 var eachPatchInternal = function(value, patches) {
-  while (patches.size) {
-    var firstPatch = patches.get(0);
-    var patches = patches.slice(1);
-    var pathArray = firstPatch.get('path').toJS();
-    value = anyPatch(value, pathArray, firstPatch.get('op'), firstPatch.get('value'));
+  for (const patch of patches) {
+    var pathArray = patch.path;
+    value = anyPatch(value, pathArray, patch.op, Immutable.fromJS(patch.value));
   }
   return value;
 };
 
 var eachPatch = function(value, patches) {
-  if (patches.size === 1) {
-    var onlyPatch = patches.get(0);
-    if (onlyPatch.get('op') === 'replace' && onlyPatch.get('path').size === 0) {
-      return onlyPatch.get('value');
+  return value.withMutations((value) => {
+    if (patches.length === 1) {
+      var onlyPatch = patches[0];
+      if (onlyPatch.op === 'replace' && onlyPatch.path.length === 0) {
+        return onlyPatch.value;
+      }
     }
-  }
-  return eachPatchInternal(value, patches);
+    return eachPatchInternal(value, patches);
+  })
 };
 
 eachPatch.default = eachPatch;
