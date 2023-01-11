@@ -8,28 +8,28 @@ var tryParseInt = function(n) {
 };
 
 var primitivePatch = function (op, value) {
-  if (op === 'add' || op === 'replace') {
+  if (op === '+' || op === '!=') {
     return value;
-  } else if (op === 'remove') {
+  } else if (op === '-') {
     return null;
   }
 };
 
 var mapPatch = function(map, firstPath, restPath, op, value) {
-  if (op === 'add') {
+  if (op === '+') {
     if (restPath.length > 0 && map.get(firstPath) === undefined) {
       var baseValue = (restPath[0].match(/^\d+$/)) ? Immutable.List() : Immutable.Map();
       return map.set(firstPath, anyPatch(baseValue, restPath, op, value));
     } else {
       return map.set(firstPath, anyPatch(map.get(firstPath), restPath, op, value));
     }
-  } else if (op === 'replace') {
+  } else if (op === '!=') {
     if (restPath.length > 0) {
       return map.set(firstPath, anyPatch(map.get(firstPath), restPath, op, value));
     } else {
       return map.set(firstPath, value);
     }
-  } else if (op === 'remove') {
+  } else if (op === '-') {
     if (restPath.length > 0) {
       return map.set(firstPath, anyPatch(map.get(firstPath), restPath, op, value));
     } else {
@@ -42,7 +42,7 @@ var mapPatch = function(map, firstPath, restPath, op, value) {
 
 var sequencePatch = function(sequence, firstPath, restPath, op, value) {
   firstPath = tryParseInt(firstPath);
-  if (op === 'add') {
+  if (op === '+') {
     if (sequence.get(firstPath) === undefined) {
       if (restPath.length > 0) {
         var baseValue = (restPath[0].match(/^\d+$/)) ? Immutable.List() : Immutable.Map();
@@ -63,13 +63,13 @@ var sequencePatch = function(sequence, firstPath, restPath, op, value) {
         return sequence.splice(firstPath, 0, value);
       }
     }
-  } else if (op === 'replace') {
+  } else if (op === '!=') {
     if (restPath.length > 0) {
       return sequence.set(firstPath, anyPatch(sequence.get(firstPath), restPath, op, value));
     } else {
       return sequence.set(firstPath, value);
     }
-  } else if (op === 'remove') {
+  } else if (op === '-') {
     if (restPath.length > 0) {
       return sequence.set(firstPath, anyPatch(sequence.get(firstPath), restPath, op, value));
     } else {
@@ -120,7 +120,7 @@ var eachPatch = function(value, patches) {
   return value.withMutations((value) => {
     if (patches.length === 1) {
       var onlyPatch = patches[0];
-      if (onlyPatch.op === 'replace' && onlyPatch.path.length === 0) {
+      if (onlyPatch.op === '!=' && onlyPatch.path.length === 0) {
         return onlyPatch.value;
       }
     }
