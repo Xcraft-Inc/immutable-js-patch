@@ -1,3 +1,8 @@
+This fork changes the format and it's no longer compliant with the RFC 6902.
+
+- Patches are plain javascript objects
+- The operators looks like `{ op: "+", path: ["d"], value: 4 }`
+
 Immutable Patch
 ====
 
