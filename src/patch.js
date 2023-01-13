@@ -50,17 +50,22 @@ var sequencePatch = function(sequence, firstPath, restPath, op, value) {
       } else {
         // special case, add to the end
         if (firstPath === '-') {
-          return sequence.splice(sequence.size, 0, value);
+          return sequence.push(value);
         }
         // special case, return the value
-        return sequence.splice(firstPath, 0, value);
+        return sequence.set(firstPath, value);
       }
     } else {
       if (restPath.length > 0) {
         return sequence.set(firstPath, anyPatch(sequence.get(firstPath), restPath, op, value));
       } else {
         // special case, return the value
-        return sequence.splice(firstPath, 0, value);
+        sequence = sequence.push(0);
+        const {size} = sequence;
+        for (let i = size - 1; i > firstPath; --i) {
+          sequence = sequence.set(i, sequence.get(i - 1));
+        }
+        return sequence.set(firstPath, value);
       }
     }
   } else if (op === '!=') {
@@ -73,7 +78,11 @@ var sequencePatch = function(sequence, firstPath, restPath, op, value) {
     if (restPath.length > 0) {
       return sequence.set(firstPath, anyPatch(sequence.get(firstPath), restPath, op, value));
     } else {
-      return sequence.remove(firstPath);
+      const {size} = sequence;
+      for (let i = firstPath; i < size - 1; ++i) {
+        sequence = sequence.set(i, sequence.get(i + 1));
+      }
+      return sequence.setSize(size - 1);
     }
   } else {
     throw new Error('sequence patch Error, unknown op: ' + op);
