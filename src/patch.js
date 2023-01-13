@@ -126,15 +126,15 @@ var eachPatchInternal = function(value, patches) {
 };
 
 var eachPatch = function(value, patches) {
-  return value.withMutations((value) => {
-    if (patches.length === 1) {
-      var onlyPatch = patches[0];
-      if (onlyPatch.op === '!=' && onlyPatch.path.length === 0) {
-        return onlyPatch.value;
-      }
+  if (patches.length === 1) {
+    var onlyPatch = patches[0];
+    if (onlyPatch.op === '!=' && onlyPatch.path.length === 0) {
+      return onlyPatch.value;
     }
-    return eachPatchInternal(value, patches);
-  })
+  }
+  return Immutable.isImmutable(value)
+    ? value.withMutations((value) => eachPatchInternal(value, patches))
+    : eachPatchInternal(value, patches);
 };
 
 eachPatch.default = eachPatch;
