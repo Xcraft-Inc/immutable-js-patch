@@ -7,7 +7,7 @@ var patch = require('../src/patch');
 describe('primitive types patch', function() {
   it('returns same value when ops are empty', function () {
     var value = 1;
-    var result = patch(value, Immutable.fromJS([]));
+    var result = patch(value, []);
 
     assert.equal(result, value);
   });
@@ -15,9 +15,9 @@ describe('primitive types patch', function() {
   it('replaces numbers', function () {
     var value = 1;
     var newValue = 10;
-    var result = patch(value, Immutable.fromJS([
-      {op: 'replace', path: '/', value: newValue}
-    ]));
+    var result = patch(value, [
+      {op: '!=', path: [], value: newValue}
+    ]);
 
     assert.equal(result, newValue);
   });
@@ -25,9 +25,9 @@ describe('primitive types patch', function() {
   it('replaces strings', function () {
     var value = '1';
     var newValue = '10';
-    var result = patch(value, Immutable.fromJS([
-      {op: 'replace', path: '/', value: newValue}
-    ]));
+    var result = patch(value, [
+      {op: '!=', path: [], value: newValue}
+    ]);
 
     assert.equal(result, newValue);
   });
@@ -35,9 +35,9 @@ describe('primitive types patch', function() {
   it('replaces arrays', function () {
     var value = [1];
     var newValue = [10];
-    var result = patch(value, Immutable.List([
-      Immutable.Map({op: 'replace', path: '/', value: newValue})
-    ]));
+    var result = patch(value, [
+      {op: '!=', path: [], value: newValue}
+    ]);
 
     assert.deepEqual(result, newValue);
   });
@@ -45,18 +45,18 @@ describe('primitive types patch', function() {
   it('replaces objects', function () {
     var value = {a: 1};
     var newValue = {b: 2};
-    var result = patch(value, Immutable.List([
-      Immutable.Map({op: 'replace', path: '/', value: newValue})
-    ]));
+    var result = patch(value, [
+      {op: '!=', path: [], value: newValue}
+    ]);
 
     assert.deepEqual(result, newValue);
   });
 
   it('when op is remove returns null', function () {
     var value = {a: 1};
-    var result = patch(value, Immutable.List([
-      Immutable.Map({op: 'remove', path: '/'})
-    ]));
+    var result = patch(value, [
+      {op: '-', path: []}
+    ]);
 
     assert.equal(result, null);
   });
