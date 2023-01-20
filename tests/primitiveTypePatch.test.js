@@ -32,26 +32,6 @@ describe('primitive types patch', function() {
     assert.equal(result, newValue);
   });
 
-  it('replaces arrays', function () {
-    var value = [1];
-    var newValue = [10];
-    var result = patch(value, [
-      {op: '!=', path: [], value: newValue}
-    ]);
-
-    assert.deepEqual(result, newValue);
-  });
-
-  it('replaces objects', function () {
-    var value = {a: 1};
-    var newValue = {b: 2};
-    var result = patch(value, [
-      {op: '!=', path: [], value: newValue}
-    ]);
-
-    assert.deepEqual(result, newValue);
-  });
-
   it('when op is remove returns null', function () {
     var value = {a: 1};
     var result = patch(value, [

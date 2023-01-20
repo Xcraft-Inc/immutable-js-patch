@@ -62,6 +62,16 @@ describe('Map patch', function() {
     assert.ok(Immutable.is(result, expected));
   });
 
+  it('replaces objects', function () {
+    var value = {a: 1};
+    var newValue = Immutable.Map({b: 2});
+    var result = patch(value, [
+      {op: '!=', path: [], value: newValue}
+    ]);
+
+    assert.deepEqual(result, newValue);
+  });
+
   describe('nested maps', function() {
     it('adds missing value in nested map', function() {
       var map = Immutable.fromJS({a: 1, b: {c: 3}});

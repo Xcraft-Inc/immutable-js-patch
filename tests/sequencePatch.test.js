@@ -89,6 +89,14 @@ describe('Indexed sequence patch', function() {
     assert.deepEqual(result.toJS(), expected.toJS())
   });
 
+  it("replaces arrays", function () {
+    var value = [1];
+    var newValue = Immutable.List([10]);
+    var result = patch(value, [{ op: "!=", path: [], value: newValue }]);
+
+    assert.deepEqual(result, newValue);
+  });
+
   describe('nested sequences', function() {
     it('adds missing value to nested seq', function () {
       var list = Immutable.fromJS([1, 2, 3, [4, 5]]);
