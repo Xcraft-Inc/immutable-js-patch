@@ -129,7 +129,7 @@ var eachPatch = function(value, patches) {
   if (patches.length === 1) {
     var onlyPatch = patches[0];
     if (onlyPatch.op === '!=' && onlyPatch.path.length === 0) {
-      return onlyPatch.value;
+      return Immutable.fromJS(onlyPatch.value);
     }
   }
   return Immutable.isImmutable(value)
