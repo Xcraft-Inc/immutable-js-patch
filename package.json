@@ -1,10 +1,10 @@
 {
-  "name": "immutablepatch",
+  "name": "xcraft-immutablepatch",
   "version": "0.5.0",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
-  "description": "Apply RFC 6902 style patches to Immutable.JS data structures",
+  "description": "Apply patches to Immutable.JS data structures",
   "main": "src/patch.js",
   "directories": {
     "test": "tests"
@@ -21,14 +21,14 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "http://github.com/intelie/immutable-js-patch.git"
+    "url": "http://github.com/Xcraft-Inc/immutable-js-patch.git"
   },
   "devDependencies": {
     "gulp": "^4.0.2",
     "gulp-mocha": "^1.1.1",
     "gulp-util": "^3.0.1",
-    "immutablediff": "Xcraft-Inc/immutable-js-diff",
-    "jscheck": "^0.2.0"
+    "jscheck": "^0.2.0",
+    "xcraft-immutablediff": "^1.0.0"
   },
   "peerDependencies": {
     "immutable": "*"
