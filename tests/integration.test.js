@@ -3,11 +3,10 @@
 var assert = require('assert');
 var Immutable = require('immutable');
 var JSC = require('jscheck');
-var diff = require('immutablediff');
+var diff = require('xcraft-immutablediff');
 var patch = require('../src/patch');
 
-
-describe('replacing root value', function() {
+describe('xcraft.immutablepatch.replacing-root-value', function() {
 
   it('should replace with 0', function() {
     assert.strictEqual(
@@ -19,7 +18,7 @@ describe('replacing root value', function() {
   });
 });
 
-describe('Map patch', function() {
+describe('xcraft.immutablepatch.map-patch.integration', function() {
   var failure = null;
 
   before(function(){

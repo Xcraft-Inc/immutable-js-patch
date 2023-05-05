@@ -4,7 +4,7 @@ var Immutable = require('immutable');
 var assert = require('assert');
 var patch = require('../src/patch');
 
-describe('Indexed sequence patch', function() {
+describe('xcraft.immutablepatch.indexed-sequence-patch', function() {
   it('returns same sequence when ops are empty', function () {
     var list = Immutable.List([1, 2, 3]);
     var ops = Immutable.List();

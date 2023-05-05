@@ -4,7 +4,7 @@ var Immutable = require('immutable');
 var assert = require('assert');
 var patch = require('../src/patch');
 
-describe('primitive types patch', function() {
+describe('xcraft.immutablepatch.primitive-types-patch', function() {
   it('returns same value when ops are empty', function () {
     var value = 1;
     var result = patch(value, []);
